@@ -84,14 +84,14 @@ public class CardContainerView extends FrameLayout {
         switch (MotionEventCompat.getActionMasked(event)) {
             case MotionEvent.ACTION_DOWN:
                 handleActionDown(event);
-                getParent().getParent().requestDisallowInterceptTouchEvent(true);
+//                getParent().getParent().requestDisallowInterceptTouchEvent(true);
                 break;
             case MotionEvent.ACTION_UP:
                 handleActionUp(event);
-                getParent().getParent().requestDisallowInterceptTouchEvent(false);
+//                getParent().getParent().requestDisallowInterceptTouchEvent(false);
                 break;
             case MotionEvent.ACTION_CANCEL:
-                getParent().getParent().requestDisallowInterceptTouchEvent(false);
+//                getParent().getParent().requestDisallowInterceptTouchEvent(false);
                 break;
             case MotionEvent.ACTION_MOVE:
                 handleActionMove(event);
@@ -255,8 +255,8 @@ public class CardContainerView extends FrameLayout {
         this.isDraggable = isDraggable;
     }
 
-    public void reset() {
-        ViewCompat.setAlpha(contentContainer, 1f);
+    public void reset(float alpha) {
+        ViewCompat.setAlpha(contentContainer, alpha);
         ViewCompat.setAlpha(overlayContainer, 0f);
     }
 

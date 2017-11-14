@@ -28,9 +28,13 @@ public class CardStackView extends FrameLayout {
 
     public interface CardEventListener {
         void onCardDragging(float percentX, float percentY);
+
         void onCardSwiped(SwipeDirection direction);
+
         void onCardReversed();
+
         void onCardMovedToOrigin();
+
         void onCardClicked(int index);
     }
 
@@ -58,18 +62,29 @@ public class CardStackView extends FrameLayout {
         @Override
         public void onContainerDragging(float percentX, float percentY) {
             update(percentX, percentY);
+            if (option.visibleCount > 1) {
+                CardContainerView view = containers.get(1);
+                view.reset(1f);
+            }
         }
+
         @Override
         public void onContainerSwiped(Point point, SwipeDirection direction) {
             swipe(point, direction);
         }
+
         @Override
         public void onContainerMovedToOrigin() {
             initializeCardStackPosition();
+            if (option.visibleCount > 1) {
+                CardContainerView view = containers.get(1);
+                view.reset(calcAlpha(1));
+            }
             if (cardEventListener != null) {
                 cardEventListener.onCardMovedToOrigin();
             }
         }
+
         @Override
         public void onContainerClicked() {
             if (cardEventListener != null) {
@@ -194,10 +209,14 @@ public class CardStackView extends FrameLayout {
         }
     }
 
+    private float calcAlpha(int position) {
+        return position == 0 ? 1.0f : (option.visibleCount - position - 1) * 0.1f + 0.2f;
+    }
+
     private void clear() {
         for (int i = 0; i < option.visibleCount; i++) {
             CardContainerView view = containers.get(i);
-            view.reset();
+            view.reset(calcAlpha(i));
             ViewCompat.setTranslationX(view, 0f);
             ViewCompat.setTranslationY(view, 0f);
             ViewCompat.setScaleX(view, 1f);
@@ -217,7 +236,6 @@ public class CardStackView extends FrameLayout {
 
         for (int i = 1; i < option.visibleCount; i++) {
             CardContainerView view = containers.get(i);
-
             float currentScale = 1f - (i * option.scaleDiff);
             float nextScale = 1f - ((i - 1) * option.scaleDiff);
             float percent = currentScale + (nextScale - currentScale) * Math.abs(percentX);
@@ -268,10 +286,10 @@ public class CardStackView extends FrameLayout {
         } else if (direction == SwipeDirection.Right) {
             getTopView().showRightOverlay();
             getTopView().setOverlayAlpha(1f);
-        } else if (direction == SwipeDirection.Bottom){
+        } else if (direction == SwipeDirection.Bottom) {
             getTopView().showBottomOverlay();
             getTopView().setOverlayAlpha(1f);
-        } else if (direction == SwipeDirection.Top){
+        } else if (direction == SwipeDirection.Top) {
             getTopView().showTopOverlay();
             getTopView().setOverlayAlpha(1f);
         }
@@ -509,5 +527,4 @@ public class CardStackView extends FrameLayout {
     public int getTopIndex() {
         return state.topIndex;
     }
-
 }
