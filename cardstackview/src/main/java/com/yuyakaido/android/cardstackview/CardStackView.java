@@ -3,7 +3,10 @@ package com.yuyakaido.android.cardstackview;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
 import android.animation.TimeInterpolator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.database.DataSetObserver;
@@ -491,6 +494,25 @@ public class CardStackView extends FrameLayout {
                 executePostSwipeTask(point, direction);
             }
         });
+    }
+
+    public void swipe(SwipeDirection direction) {
+        View target = getTopView();
+
+        ValueAnimator rotation = ObjectAnimator.ofPropertyValuesHolder(
+                target, PropertyValuesHolder.ofFloat("rotation", -10f));
+        rotation.setDuration(200);
+        ValueAnimator translateX = ObjectAnimator.ofPropertyValuesHolder(
+                target, PropertyValuesHolder.ofFloat("translationX", 0f, -2000f));
+        ValueAnimator translateY = ObjectAnimator.ofPropertyValuesHolder(
+                target, PropertyValuesHolder.ofFloat("translationY", 0f, 500f));
+        translateX.setStartDelay(100);
+        translateY.setStartDelay(100);
+        translateX.setDuration(500);
+        translateY.setDuration(500);
+        AnimatorSet set = new AnimatorSet();
+        set.playTogether(rotation, translateX, translateY);
+        swipe(direction, set);
     }
 
     public void swipe(final SwipeDirection direction, AnimatorSet set) {
