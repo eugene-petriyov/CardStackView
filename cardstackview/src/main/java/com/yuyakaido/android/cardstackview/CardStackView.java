@@ -345,6 +345,8 @@ public class CardStackView extends FrameLayout {
         if (containers.size() > 1) {
             containers.get(1).setContainerEventListener(containerEventListener);
             containers.get(1).setDraggable(true);
+            CardContainerView view = containers.get(1);
+            view.reset(calcAlpha(1));
         }
     }
 
