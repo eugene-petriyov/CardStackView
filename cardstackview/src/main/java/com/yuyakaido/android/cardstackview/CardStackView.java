@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
-import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -297,14 +296,6 @@ public class CardStackView extends FrameLayout {
             getTopView().setOverlayAlpha(1f);
         }
         set.addListener(listener);
-        set.setInterpolator(new TimeInterpolator() {
-            @Override
-            public float getInterpolation(float input) {
-                CardContainerView view = getTopView();
-                update(view.getPercentX(), view.getPercentY());
-                return input;
-            }
-        });
         set.start();
     }
 
